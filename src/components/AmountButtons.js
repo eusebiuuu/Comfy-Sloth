@@ -1,9 +1,31 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import { FaPlus, FaMinus } from 'react-icons/fa'
 
-const AmountButtons = () => {
-  return <h4>amount buttons </h4>
+const AmountButtons = ({ id, stock }) => {
+  const [counter, setCounter] = useState(1);
+
+  const handleCounterIncrement = () => {
+    setCounter(prev => {
+      return Math.min(prev + 1, stock);
+    });
+  }
+
+  const handleCounterDecrement = () => {
+    setCounter(prev => {
+      return Math.max(1, prev - 1);
+    });
+  }
+
+  return <Wrapper>
+    <button onClick={handleCounterDecrement}>
+      <FaMinus />
+    </button>
+    <h2>{counter}</h2>
+    <button onClick={handleCounterIncrement}>
+      <FaPlus />
+    </button>
+  </Wrapper>
 }
 
 const Wrapper = styled.div`
@@ -25,9 +47,6 @@ const Wrapper = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-  }
-  h2 {
-    margin-bottom: 0;
   }
 `
 

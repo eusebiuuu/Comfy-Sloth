@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import logo from '../assets/logo.svg'
 import { Link } from 'react-router-dom'
 import { useProductsContext } from '../context/products_context'
@@ -9,7 +9,27 @@ import CartButtons from './CartButtons'
 import { useUserContext } from '../context/user_context'
 
 const Sidebar = () => {
-  return <h4>sidebar</h4>
+  const {isSidebarOpen: isOpen, closeSidebar, ...productsContext } = useProductsContext();
+  return <SidebarContainer>
+    <aside className={`sidebar ${isOpen ? 'show-sidebar' : ''}`}>
+      <div className='sidebar-header'>
+        <img src={logo} className='logo' alt={'Comfy sloth logo'} />
+        <button className='close-btn' onClick={closeSidebar}>
+          <FaTimes />
+        </button>
+      </div>
+      <ul className='links'>
+        {links.map((link) => {
+          return <li key={link.id}>
+              <Link to={link.url} onClick={closeSidebar}>{link.text}</Link>
+            </li>
+        })}
+      </ul>
+      <div className='cart-btn-wrapper'>
+        <CartButtons />
+      </div>
+    </aside>
+  </SidebarContainer>
 }
 
 const SidebarContainer = styled.div`
@@ -83,4 +103,4 @@ const SidebarContainer = styled.div`
   }
 `
 
-export default Sidebar
+export default Sidebar;

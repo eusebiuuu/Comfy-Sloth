@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { useParams, useHistory } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { useProductsContext } from '../context/products_context'
 import { single_product_url as url } from '../utils/constants'
 import { formatPrice } from '../utils/helpers'
@@ -15,7 +15,63 @@ import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 
 const SingleProductPage = () => {
-  return <h4>single product page</h4>
+  const { getSingleProduct, singleProduct: product, singleProductLoading, singleProductError } = useProductsContext();
+  const { id } = useParams();
+  const navigation = useNavigate();
+
+  useEffect(() => {
+    (async () => {
+      await getSingleProduct(`${url}${id}`);
+    })();
+  }, [id]);
+
+  useEffect(() => {
+    if (singleProductError) {
+      setTimeout(() => {
+        navigation('/', { replace: true });
+      }, 2000);
+    }
+  }, [singleProductError]);
+
+  if (singleProductLoading) {
+    return <Wrapper>
+      <Loading />
+    </Wrapper>
+  } else if (singleProductError) {
+    return <Wrapper>
+      <Error />
+    </Wrapper>
+  }
+  const { name, price, stars, images, id: productID, company, description, reviews, stock} = product;
+  return <Wrapper>
+    <PageHero title={['products', name]} />
+    <div className='section section-center page'>
+      <Link to='/products' className='btn'>Back to products</Link>
+      <div className='product-center'>
+        <ProductImages images={images} />
+        <section className='content'>
+          <h2>{name}</h2>
+          <Stars stars={stars} reviews={reviews} />
+          <h5 className='price'>{formatPrice(price)}</h5>
+          <p className='desc'>{description}</p>
+          <div className='info'>
+            <span>Available:</span>
+            {stock > 0 ? `${stock} pieces remained in stock` : 'Out of stock'}
+          </div>
+          <div className='info'>
+            <span>ProductID:</span>
+            {productID}
+          </div>
+          <div className='info'>
+            <span>Company:</span>
+            {company}
+          </div>
+          <hr />
+          {stock > 0 && <AddToCart product={product} />}
+        </section>
+      </div>
+    </div>
+  </Wrapper>
 }
 
 const Wrapper = styled.main`

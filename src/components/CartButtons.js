@@ -8,8 +8,9 @@ import { useUserContext } from '../context/user_context'
 
 const CartButtons = () => {
   // const cart = useCartContext();
+  const { closeSidebar } = useProductsContext();
   return <Wrapper className='cart-btn-wrapper'>
-    <NavLink to='/cart' className='cart-btn'>
+    <NavLink to='/cart' className='cart-btn' onClick={closeSidebar}>
       Cart
       <span className='cart-container'>
         <FaShoppingCart />
@@ -18,7 +19,7 @@ const CartButtons = () => {
         </span>
       </span>
     </NavLink>
-    <button type='button' className='auth-btn'>
+    <button type='button' className='auth-btn' onClick={closeSidebar}>
       Login
       <FaUserPlus />
     </button>

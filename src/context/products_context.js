@@ -13,18 +13,74 @@ import {
   GET_SINGLE_PRODUCT_ERROR,
 } from '../actions'
 
-const initialState = {}
-
-const ProductsContext = React.createContext()
-
-export const ProductsProvider = ({ children }) => {
-  return (
-    <ProductsContext.Provider value='products context'>
-      {children}
-    </ProductsContext.Provider>
-  )
+const initialState = {
+  isSidebarOpen: false,
+  productsLoading: false,
+  productsError: false,
+  products: [],
+  featuredProducts: [],
+  singleProductLoading: false,
+  singleProductError: false,
+  singleProduct: {},
 }
-// make sure use
-export const useProductsContext = () => {
-  return useContext(ProductsContext)
+
+const ProductsContext = React.createContext();
+
+const ProductsProvider = ({ children }) => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  const openSidebar = () => {
+    dispatch({ type: SIDEBAR_OPEN });
+  }
+
+  const closeSidebar = () => {
+    dispatch({ type: SIDEBAR_CLOSE });
+  }
+
+  const getAllProducts = async () => {
+    dispatch({ type: GET_PRODUCTS_BEGIN });
+    try {
+      const response = await axios.get(url);
+      const products = response.data;
+      dispatch({ type: GET_PRODUCTS_SUCCESS, payload: products });
+    } catch (error) {
+      dispatch({ type: GET_PRODUCTS_ERROR, payload: error });
+    }
+  }
+
+  const getSingleProduct = async (url) => {
+    dispatch({ type: GET_SINGLE_PRODUCT_BEGIN });
+    try {
+      const response = await axios.get(url);
+      const product = response.data;
+      console.log(product);
+      dispatch({ type: GET_SINGLE_PRODUCT_SUCCESS, payload: product });
+    } catch (error) {
+      console.log(error);
+      dispatch({ type: GET_SINGLE_PRODUCT_ERROR, payload: error });
+    }
+  }
+
+  useEffect(() => {
+    (async () => {
+      await getAllProducts();
+    })();
+  }, []);
+
+  const value = {
+    ...state,
+    openSidebar,
+    closeSidebar,
+    getSingleProduct,
+  }
+
+  return (<ProductsContext.Provider value={value}>
+    {children}
+  </ProductsContext.Provider>);
 }
+
+const useProductsContext = () => {
+  return useContext(ProductsContext);
+}
+
+export { useProductsContext, ProductsProvider };
