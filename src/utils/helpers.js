@@ -6,4 +6,10 @@ export const formatPrice = (price) => {
     return realPrice;
 }
 
-export const getUniqueValues = () => {}
+export const getUniqueValues = (data, field) => {
+    let allFields = data.map(item => item[field]);
+    if (field === 'colors') {
+        allFields = allFields.flat();
+    }
+    return ['all', ...new Set(allFields)];
+}

@@ -6,11 +6,25 @@ import { useCartContext } from '../context/cart_context'
 import AmountButtons from './AmountButtons'
 
 const AddToCart = ({ product }) => {
+  const { onCartAddition } = useCartContext();
   const { id, stock, colors } = product;
   const [mainColor, setMainColor] = useState(colors[0]);
+  const [counter, setCounter] = useState(1);
 
   const handleColorChange = (color) => {
     setMainColor(color);
+  }
+
+  const handleCounterIncrement = () => {
+    setCounter(prev => {
+      return Math.min(prev + 1, stock);
+    });
+  }
+
+  const handleCounterDecrement = () => {
+    setCounter(prev => {
+      return Math.max(1, prev - 1);
+    });
   }
 
   return <Wrapper>
@@ -30,9 +44,10 @@ const AddToCart = ({ product }) => {
       </div>
     </div>
     <div className='btn-container'>
-      <AmountButtons id={id} stock={stock} />
+      <AmountButtons onCounterIncrement={handleCounterIncrement} 
+        counter={counter} onCounterDecrement={handleCounterDecrement} />
     </div>
-    <Link to='/cart' className='btn'>
+    <Link to='/cart' className='btn' onClick={() => onCartAddition({ id, color: mainColor, amount: counter, product })}>
       Add to cart
     </Link>
   </Wrapper>
