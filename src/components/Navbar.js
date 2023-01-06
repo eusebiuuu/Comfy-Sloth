@@ -5,19 +5,20 @@ import { FaBars } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 import { links } from '../utils/constants'
 import CartButtons from './CartButtons'
-import { useProductsContext } from '../context/products_context'
 import { useUserContext } from '../context/user_context'
+import { handleSidebarOpen } from '../features/products/productsSlice';
+import { useDispatch } from 'react-redux'
 
 const Nav = () => {
-  const { closeSidebar, ...productsContext } = useProductsContext();
-  const openSidebar = productsContext.openSidebar;
+  const dispatch = useDispatch();
+  const { currUser } = useUserContext();
   return <NavContainer>
     <div className='nav-center'>
       <div className='nav-header'>
         <Link to='/'>
           <img src={logo} alt={'Comfy sloth'} />
         </Link>
-        <button type='button' className='nav-toggle' onClick={openSidebar}>
+        <button type='button' className='nav-toggle' onClick={() => dispatch(handleSidebarOpen())}>
           <FaBars />
         </button>
       </div>
@@ -27,6 +28,7 @@ const Nav = () => {
               <Link to={link.url}>{link.text}</Link>
             </li>
         })}
+        {currUser && <li><Link to='/checkout'>Checkout</Link></li>}
       </ul>
       <CartButtons />
     </div>

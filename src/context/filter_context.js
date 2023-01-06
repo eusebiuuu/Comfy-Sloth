@@ -10,7 +10,7 @@ import {
   FILTER_PRODUCTS,
   CLEAR_FILTERS,
 } from '../actions'
-import { useProductsContext } from './products_context'
+import { useSelector } from 'react-redux';
 
 const initialState = {
   products: [],
@@ -33,7 +33,7 @@ const FilterContext = React.createContext();
 
 export const FilterProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const { products } = useProductsContext();
+  const { products } = useSelector(store => store.products);
 
   useEffect(() => {
     dispatch({ type: LOAD_PRODUCTS, payload: products });

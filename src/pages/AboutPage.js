@@ -1,9 +1,12 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { PageHero } from '../components'
 import aboutImg from '../assets/hero-bcg.jpeg'
 
 const AboutPage = () => {
+  useEffect(() => {
+    console.log('Mounted');
+  });
   return <>
     <PageHero title={['about']} />
     <Wrapper className='page section section-center'>

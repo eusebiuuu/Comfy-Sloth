@@ -1,12 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
-import { useCartContext } from '../context/cart_context'
 import { useUserContext } from '../context/user_context'
 import { formatPrice } from '../utils/helpers'
 import { Link } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 
 const CartTotals = () => {
-  const { shippingFee, totalPrice } = useCartContext();
+  const { loginWithRedirect, currUser } = useUserContext();
+  const { shippingFee, totalPrice } = useSelector((store) => store.cart);
   return <Wrapper>
     <div>
       <article>
@@ -24,7 +25,9 @@ const CartTotals = () => {
           <span>{formatPrice(totalPrice + shippingFee)}</span>
         </h4>
       </article>
-      <Link to='/checkout' className='btn'>Buy the products</Link>
+      {currUser ?
+        <Link to='/checkout' className='btn'>Buy the products</Link> :
+        <button onClick={loginWithRedirect} className='btn'>Login</button>}
     </div>
   </Wrapper>
 }

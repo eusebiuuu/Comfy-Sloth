@@ -1,13 +1,15 @@
 import React from 'react'
 import styled from 'styled-components'
-import { useCartContext } from '../context/cart_context'
 import { Link } from 'react-router-dom'
 import CartColumns from './CartColumns'
 import CartItem from './CartItem'
 import CartTotals from './CartTotals'
+import { handleCartClear } from '../features/cart/cartSlice'
+import { useDispatch, useSelector } from 'react-redux'
 
 const CartContent = () => {
-  const { cart, onCartClear } = useCartContext();
+  const dispatch = useDispatch();
+  const { cart } = useSelector((store) => store.cart);
   // console.log(cart);
   return <Wrapper className='section section-center'>
     <CartColumns />
@@ -18,7 +20,7 @@ const CartContent = () => {
     <hr />
     <div className='link-container'>
       <Link to='/products' className='link-btn'>Continue shopping</Link>
-      <button className='link-btn clear-btn' onClick={onCartClear}>Clear shopping cart</button>
+      <button className='link-btn clear-btn' onClick={() => dispatch(handleCartClear())}>Clear shopping cart</button>
     </div>
     <CartTotals />
   </Wrapper>

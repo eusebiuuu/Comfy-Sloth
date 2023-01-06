@@ -5,7 +5,7 @@ import HomePage from './HomePage'
 import ErrorPage from './ErrorPage'
 import ProductsPage from './ProductsPage'
 import SingleProductPage from './SingleProductPage'
-import PrivateRoute from './PrivateRoute'
+import AuthWrapper from './AuthWrapper'
 
 export {
     AboutPage,
@@ -15,6 +15,6 @@ export {
     ErrorPage,
     ProductsPage,
     SingleProductPage,
-    PrivateRoute
+    AuthWrapper
 }
 

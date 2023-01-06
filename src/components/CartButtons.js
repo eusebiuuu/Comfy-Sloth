@@ -2,27 +2,31 @@ import React from 'react'
 import { FaShoppingCart, FaUserMinus, FaUserPlus } from 'react-icons/fa'
 import { NavLink } from 'react-router-dom'
 import styled from 'styled-components'
-import { useProductsContext } from '../context/products_context'
-import { useCartContext } from '../context/cart_context'
 import { useUserContext } from '../context/user_context'
+import { useDispatch, useSelector } from 'react-redux';
+import { handleSidebarClose } from '../features/products/productsSlice';
 
 const CartButtons = () => {
-  // const cart = useCartContext();
-  const { closeSidebar } = useProductsContext();
+  const dispatch = useDispatch();
+  const { itemsCount } = useSelector((store) => store.cart);
+  const { loginWithRedirect, currUser, logout } = useUserContext();
   return <Wrapper className='cart-btn-wrapper'>
-    <NavLink to='/cart' className='cart-btn' onClick={closeSidebar}>
+    <NavLink to='/cart' className='cart-btn' onClick={() => dispatch(handleSidebarClose())}>
       Cart
       <span className='cart-container'>
         <FaShoppingCart />
         <span className='cart-value'>
-          10
+          {itemsCount}
         </span>
       </span>
     </NavLink>
-    <button type='button' className='auth-btn' onClick={closeSidebar}>
-      Login
-      <FaUserPlus />
-    </button>
+    {!currUser ?
+    <button type='button' className='auth-btn' onClick={loginWithRedirect}>
+      Login <FaUserPlus />
+    </button> :
+    <button type='button' className='auth-btn' onClick={() => logout({ returnTo: window.location.origin })}>
+      Logout <FaUserMinus />
+    </button>}
   </Wrapper>
 }
 

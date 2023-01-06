@@ -3,18 +3,18 @@ import styled from 'styled-components'
 import { formatPrice } from '../utils/helpers'
 import AmountButtons from './AmountButtons'
 import { FaTrash } from 'react-icons/fa'
-import { useCartContext } from '../context/cart_context'
+import { handleCartAmountToggle, handleCartItemRemove } from '../features/cart/cartSlice'
+import { useDispatch } from 'react-redux'
 
 const CartItem = ({ id, color, amount, image, name, price, maxAmount }) => {
-  // console.log(name, price, id);
-  const { onCartItemRemove, onCartAmountToggle } = useCartContext();
+  const dispatch = useDispatch();
 
   const handleCounterIncrement = () => {
-    onCartAmountToggle(id, Math.min(amount + 1, maxAmount));
+    dispatch(handleCartAmountToggle({id: id, amount: Math.min(amount + 1, maxAmount)}));
   }
 
   const handleCounterDecrement = () => {
-    onCartAmountToggle(id, Math.max(1, amount - 1));
+    dispatch(handleCartAmountToggle({id: id, amount: Math.max(1, amount - 1)}));
   }
 
   return <Wrapper>
@@ -32,7 +32,7 @@ const CartItem = ({ id, color, amount, image, name, price, maxAmount }) => {
     <AmountButtons onCounterIncrement={handleCounterIncrement} 
       onCounterDecrement={handleCounterDecrement} counter={amount} />
     <h5 className='subtotal'>{formatPrice(amount * price)}</h5>
-    <button className='remove-btn' onClick={() => onCartItemRemove(id)}>
+    <button className='remove-btn' onClick={() => dispatch(handleCartItemRemove(id))}>
       <FaTrash />
     </button>
   </Wrapper>

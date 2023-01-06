@@ -1,29 +1,33 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import logo from '../assets/logo.svg'
 import { Link } from 'react-router-dom'
-import { useProductsContext } from '../context/products_context'
 import { FaTimes } from 'react-icons/fa'
 import { links } from '../utils/constants'
 import styled from 'styled-components'
 import CartButtons from './CartButtons'
 import { useUserContext } from '../context/user_context'
+import { useDispatch, useSelector } from 'react-redux'
+import { handleSidebarClose } from '../features/products/productsSlice'
 
 const Sidebar = () => {
-  const {isSidebarOpen: isOpen, closeSidebar, ...productsContext } = useProductsContext();
+  const dispatch = useDispatch();
+  const { currUser } = useUserContext();
+  const { isSidebarOpen: isOpen } = useSelector((store) => store.products);
   return <SidebarContainer>
     <aside className={`sidebar ${isOpen ? 'show-sidebar' : ''}`}>
       <div className='sidebar-header'>
         <img src={logo} className='logo' alt={'Comfy sloth logo'} />
-        <button className='close-btn' onClick={closeSidebar}>
+        <button className='close-btn' onClick={() => dispatch(handleSidebarClose())}>
           <FaTimes />
         </button>
       </div>
       <ul className='links'>
         {links.map((link) => {
           return <li key={link.id}>
-              <Link to={link.url} onClick={closeSidebar}>{link.text}</Link>
-            </li>
+            <Link to={link.url} onClick={() => dispatch(handleSidebarClose())}>{link.text}</Link>
+          </li>
         })}
+        {currUser && <li><Link to='/checkout'>Checkout</Link></li>}
       </ul>
       <div className='cart-btn-wrapper'>
         <CartButtons />

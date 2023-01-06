@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { useProductsContext } from '../context/products_context'
 import { single_product_url as url } from '../utils/constants'
 import { formatPrice } from '../utils/helpers'
 import {
@@ -13,16 +12,18 @@ import {
 } from '../components'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
+import { getSingleProduct } from '../features/products/productsSlice'
+import { useDispatch, useSelector } from 'react-redux'
 
 const SingleProductPage = () => {
-  const { getSingleProduct, singleProduct: product, singleProductLoading, singleProductError } = useProductsContext();
-  const { id } = useParams();
+  const { singleProduct: product, singleProductLoading, singleProductError } = useSelector(store => store.products);
+  const dispatch = useDispatch();
   const navigation = useNavigate();
+  const { id } = useParams();
 
   useEffect(() => {
-    (async () => {
-      await getSingleProduct(`${url}${id}`);
-    })();
+    dispatch(getSingleProduct(`${url}${id}`));
+    // eslint-disable-next-line
   }, [id]);
 
   useEffect(() => {
@@ -31,6 +32,7 @@ const SingleProductPage = () => {
         navigation('/', { replace: true });
       }, 2000);
     }
+    // eslint-disable-next-line
   }, [singleProductError]);
 
   if (singleProductLoading) {

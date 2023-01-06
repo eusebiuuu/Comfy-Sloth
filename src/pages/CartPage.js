@@ -1,11 +1,13 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
-import { useCartContext } from '../context/cart_context'
 import { Link } from 'react-router-dom'
 import { CartContent, PageHero } from '../components'
+import { useSelector } from 'react-redux'
+
 
 const CartPage = () => {
-  const { cart } = useCartContext();
+  const { cart } = useSelector((store) => store.cart);
+
   if (cart.length === 0) {
     return <Wrapper className='page-100'>
       <div className='empty'>

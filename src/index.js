@@ -1,22 +1,27 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import { createRoot } from 'react-dom/client'
 import './index.css';
 import App from './App';
 
-import { ProductsProvider } from './context/products_context';
 import { FilterProvider } from './context/filter_context';
-import { CartProvider } from './context/cart_context';
 import { UserProvider } from './context/user_context';
 import { Auth0Provider } from '@auth0/auth0-react';
+import { Provider } from 'react-redux'
+import { store } from './store'
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-
-root.render(<React.StrictMode>
-	<ProductsProvider>
-		<FilterProvider>
-			<CartProvider>
-				<App />
-			</CartProvider>
-		</FilterProvider>
-	</ProductsProvider>
+const root = document.getElementById('root');
+createRoot(root).render(<React.StrictMode>
+	<Provider store={store}>
+		<Auth0Provider
+			domain="dev-8iki6kghscspsoko.us.auth0.com"
+			clientId="o5FaTR88Sw4YF69cBKX2KmsvWbMtA1i9"
+			redirectUri={window.location.origin}
+			cacheLocation='localstorage'>
+			<UserProvider>
+				<FilterProvider>
+					<App />
+				</FilterProvider>
+			</UserProvider>
+		</Auth0Provider>
+	</Provider>
 </React.StrictMode>);
