@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { single_product_url as url } from '../utils/constants'
 import { formatPrice } from '../utils/helpers'
 import {
   Loading,
@@ -22,7 +21,7 @@ const SingleProductPage = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    dispatch(getSingleProduct(`${url}${id}`));
+    dispatch(getSingleProduct(id));
     // eslint-disable-next-line
   }, [id]);
 

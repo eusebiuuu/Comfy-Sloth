@@ -1,8 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
-import heroBcg from '../assets/hero-bcg.jpeg'
-import heroBcg2 from '../assets/hero-bcg-2.jpeg'
+import image from '../assets/home-img.svg'
 
 const Hero = () => {
   return <Wrapper className='section-center'>
@@ -14,8 +13,7 @@ const Hero = () => {
       <Link to='/products' className='btn hero-btn'>Shop now</Link>
     </div>
     <div className='img-container'>
-      <img className='main-img' src={heroBcg} alt={'Desk'} />
-      <img className='accent-img' src={heroBcg2} alt={'Worker'} />
+      <img className='main-img' src={image} alt={'Nice'} />
     </div>
   </Wrapper>
 }
@@ -38,7 +36,7 @@ const Wrapper = styled.section`
   @media (min-width: 992px) {
     height: calc(100vh - 5rem);
     grid-template-columns: 1fr 1fr;
-    gap: 8rem;
+    gap: 2rem;
     h1 {
       margin-bottom: 2rem;
     }
@@ -59,7 +57,7 @@ const Wrapper = styled.section`
       position: relative;
       border-radius: var(--radius);
       display: block;
-      object-fit: cover;
+      object-fit: contain;
     }
     .accent-img {
       position: absolute;
@@ -67,16 +65,6 @@ const Wrapper = styled.section`
       left: 0;
       width: 250px;
       transform: translateX(-50%);
-      border-radius: var(--radius);
-    }
-    .img-container::before {
-      content: '';
-      position: absolute;
-      width: 10%;
-      height: 80%;
-      background: var(--clr-primary-9);
-      bottom: 0%;
-      left: -8%;
       border-radius: var(--radius);
     }
   }

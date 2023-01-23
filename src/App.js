@@ -14,7 +14,6 @@ import {
 } from './pages'
 import { useDispatch, useSelector } from 'react-redux'
 import { getAllProducts } from './features/products/productsSlice'
-import { products_url as url } from './utils/constants'
 
 function App() {
   const { user } = useAuth0();
@@ -28,7 +27,7 @@ function App() {
   }, [cart]);
 
   useEffect(() => {
-    dispatch(getAllProducts(url));
+    dispatch(getAllProducts());
     // eslint-disable-next-line
   }, []);
 
